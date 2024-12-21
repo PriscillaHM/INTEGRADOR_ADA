@@ -1,4 +1,5 @@
 //SISTEMA DE GESTION DE BIBLIOTECA
+//GRUPO 7 
 //Paso 0.- Colocamos la constante prompt para que los usuarios puedan ingresar datos
 //en nuestro programa ya sea en letras o numeros.
 const prompt = require("prompt-sync")({ sigint: true });
@@ -24,7 +25,7 @@ let libros = [
 ];
 
 // Paso 2.- Imprimimos para que se muestre nuestro array de libros
-console.log("Libros: ", libros);
+//console.log("Libros: ", libros);
 
 // b) Array donde se guardan los usuarios.
 // Paso 3.- Creamos un array con datos (id (número), nombre (string), email (string), 
@@ -40,7 +41,7 @@ let usuarios = [
 
 //Paso 4.- Imprimimos
 
-console.log("Usuarios: " , usuarios);
+//console.log("Usuarios: " , usuarios);
 
 // 2. Funciones de Gestion de Libros 
 
@@ -61,15 +62,67 @@ console.log("Usuarios: " , usuarios);
 
 // a) Implementar una función registrarUsuario(nombre, email) que 
 // agregue un nuevo usuario al array usuarios.
+let registrarUsuario = (nombre, email) =>{
+    if(!nombre || !email){
+        console.log('El nombre y el usuario son obligatorios. Intente nuevamente.');
+        return;
+    }
+
+    //Creamos el nuevo usuario
+    const nuevoUsuario = {nombre, email};
+
+    //Agregamos el usuario al array
+    usuarios.push(nuevoUsuario);
+
+
+    console.log('Usuario registrado con exito: ', nuevoUsuario);
+}
 
 // b) Implementar una función mostrarTodosLosUsuarios() que me 
 // devuelva el array completo de usuarios
+let mostrarTodosLosUsuarios = () => {
+    //Si no usuarios registrados
+    if (usuarios.length === 0) {
+        console.log("No hay usuarios registrados.");
+        return;
+    }
+
+    console.log("Usuarios registrados:");
+    //Recore el array e imprime los usuarios registrados
+    usuarios.forEach((usuario, index) => {
+        console.log(`${index + 1}. Nombre: ${usuario.nombre}, Email: ${usuario.email}`);
+    });
+}
 
 // c) Crear una función buscarUsuario(email) que devuelva la información 
 // de un usuario dado su email.
+let buscarUsuario = (emailBuscar) =>{
+    //Buscamos en el array el email proporcionado
+    let indice = usuarios.find(usuario => usuario.email == emailBuscar);
+    //En caso de que no encuentre el usuario
+    if(indice == undefined){
+        console.log(`Usuario con email el ${emailBuscar} no ha sido encontrado`);
+    } else{ //En caso de encontrar el usuario
+       console.log(`Usuario encontrado: nombre ${indice.nombre}, email ${indice.email}`);
+    }
+}
 
 // d) Implementar una función borrarUsuario(nombre, email) que elimine el 
 // usuario seleccionado.
+let borrarUsuario = (nombreBorrar, emailBorrar) =>{
+    //Buscamos en el array el email proporcionado
+    let indiceNombre = usuarios.find(usuario => usuario.nombre == nombreBorrar);
+    let indiceEmail = usuarios.find(usuario => usuario.email == emailBorrar);
+    let indice = usuarios.findIndex(usuario => usuario.email === emailBorrar);
+    //En caso de que no encuentre el usuario
+    if(indiceNombre.id != indiceEmail.id){
+        console.log(`Usuario con el nombre ${nombreBorrar} y el email el ${emailBuscar} no ha sido encontrado`);
+    } else{ //En caso de encontrar el usuario
+        //Usuario que se borrara
+        const usuarioABorrar = usuarios.splice(indice,1);
+        console.log(`Usuario eliminado: nombre ${nombreBorrar}, email ${emailBorrar}`);
+    }
+}
 
 // 4. Sistema de Préstamos
 
@@ -121,10 +174,50 @@ console.log("Usuarios: " , usuarios);
 // a) Implementar una función menuPrincipal() que muestre un menú de 
 // opciones al usuario y permita interactuar con el sistema utilizando 
 // prompt().
-
 // b) El menú debe incluir opciones para todas las funcionalidades 
 // anteriores y utilizar estructuras de control (if, switch, ciclos) para 
 // manejar la lógica.
+
+
+let menuPrincipal = () =>{
+    let opcion;
+    do {
+        console.log("\n=== Menú ===");
+        console.log("5. Registrar usuario");
+        console.log("6. Mostrar usuarios");
+        console.log("7. Buscar usuario");
+        console.log("8. Borrar usuario");
+        console.log("3. Salir");
+        opcion = prompt("Seleccione una opción: ");
+
+        switch (opcion) {
+            case "5":
+                const nombre = prompt("Ingrese el nombre del usuario: ");
+                const email = prompt("Ingrese el email del usuario: ");
+                registrarUsuario(nombre, email);
+                break;
+            case "6":
+                mostrarTodosLosUsuarios();
+                break;
+            case "7":
+                const emailBuscar = prompt('Ingrese el email del usuario que desea buscar: ');
+                buscarUsuario(emailBuscar);
+                break;
+            case "8":
+                const nombreBorrar = prompt('Ingrese el nombre del usuario que desea borrar: ');
+                const emailBorrar = prompt('Ingrese el email del usuario que desea borrar: ');
+                borrarUsuario(nombreBorrar,emailBorrar);
+                break;
+            case "3":
+                console.log("Saliendo del programa...");
+                break;
+            default:
+                console.log("Opción no válida. Intente de nuevo.");
+        }
+    } while (opcion !== "3");
+}
+
+menuPrincipal();
 
 // 10. Comentando mi código
 

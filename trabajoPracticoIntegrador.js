@@ -1,10 +1,46 @@
 //SISTEMA DE GESTION DE BIBLIOTECA
+//Paso 0.- Colocamos la constante prompt para que los usuarios puedan ingresar datos
+//en nuestro programa ya sea en letras o numeros.
+const prompt = require("prompt-sync")({ sigint: true });
 
 // 1. Estructura del proyecto
 
 // a) Array donde se guardan los libros.
+// Paso 1.- Creamos un array llamado objeto que contenga datos de diez libros (id (número) 
+// , título (string), autor (string), año (número), género (string),
+//  disponible (booleano: true o false).)
+
+let libros = [ 
+    {id: 1, título: "Fahrenheit 451", autor: "Ray Bradbury", año: 1953, género: "Ciencia ficcion", disponible: true }, //colocamos [] para que los datos a consultar sean por libro
+    {id: 2, título: "Cumbres borrascosas", autor: "Emily Bronte", año: 1847, género: "Romance", disponible: true },
+    {id: 3, título: "Mujercitas", autor: "Louisa May Alcott", año: 1868, género: "Ficcion", disponible: false },
+    {id: 4, título: "Dracula", autor: "Bram Stoker", año: 1897, género: "Terror", disponible: false },
+    {id: 5, título: "La tregua", autor: "Mario Benedetti", año: 1960, género: "Romance", disponible: false },
+    {id: 6, título: "Dune", autor: "Frank Herbert", año: 1965, género: "Ciencia ficcion", disponible: true },
+    {id: 7, título: "Carrie", autor: "Stephen King", año: 1974, género: "Terror", disponible: false },
+    {id: 8, título: "El hombre en busca de sentido", autor: "Viktor Frankl", año: 1946, género: "Psicologia", disponible: true },
+    {id: 9, título: "Ensayo sobre la ceguera", autor: "Jose Saramago", año: 1995, género: "Distopia", disponible: true },
+    {id: 10, título: "Un mundo feliz", autor: "Aldous Huxley", año: 1932, género: "Distopia", disponible: false },
+];
+
+// Paso 2.- Imprimimos para que se muestre nuestro array de libros
+console.log("Libros: ", libros);
 
 // b) Array donde se guardan los usuarios.
+// Paso 3.- Creamos un array con datos (id (número), nombre (string), email (string), 
+// librosPrestados "array de ids de libros".) de al menos cinco usarios.
+
+let usuarios = [
+    {id: 1, nombre: "Berenice Castro", email: "berenice.castro@gmail.com", libros: [3]},
+    {id: 2, nombre: "Liz Quero", email: "liz.quero@gmail.com", libros: [9]},
+    {id: 3, nombre: "Priscila Hurtado", email: "priscila.hurtado@gmail.com", libros: [4]},
+    {id: 4, nombre: "Aura Garcia", email: "aura.garcia@gmail.com", libros: [2]},
+    {id: 5, nombre: "Daniela Mendez", email: "daniela.mendez@gmail.com", libros: [6] },
+]
+
+//Paso 4.- Imprimimos
+
+console.log("Usuarios: " , usuarios);
 
 // 2. Funciones de Gestion de Libros 
 

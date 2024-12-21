@@ -217,9 +217,10 @@ let normalizarDatos = () =>{
     //Formatear los emails de los usuarios a minúsculas.
     usuarios.forEach(usuario =>{
         usuario.email = usuario.email.toLowerCase();
-    })
-    console.log(libros);
-    console.log(usuarios)
+    });
+    
+    console.log("Libros formateados:", libros);
+    console.log("Usuarios formateados:", usuarios);
 }
 
 // 9. Interfaz de Usuario por Consola

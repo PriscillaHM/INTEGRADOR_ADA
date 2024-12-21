@@ -173,13 +173,42 @@ let devolverLibro = (idLibro, idUsuario) =>{
 }
 
 // 5. Reportes
-// a) Crear una función generarReporteLibros() que utilice métodos 
-// avanzados de arrays (.map(), .filter(), .reduce()) para generar un 
-// reporte con la siguiente información:
-// ✓ Cantidad total de libros.
-// ✓ Cantidad de libros prestados.
-// ✓ Cantidad de libros por género.
-// ✓ Libro más antiguo y más nuevo.
+// Paso 1.- a) Crear una función generarReporteLibros()
+let generarReporteLibros = () => { //notita:usamos un arrow para simplificar
+    const titulos = libros.map(libro => libro.titulo); //usamos map. para que se muestren solo titulos (decidimos usar arrow => en toda la sección para no utilizar la palabra function y acortar codigo) e imprimimos
+    console.log (`Dato 1.-Los libros dentro del reporte son:  ${titulos}`);
+
+    const totalLibros = libros.length; // definimos cuantos libros hay y colocamos ese dato dentro de nuestra funcion
+    console.log (`Dato 2.-La cantidad total de libros es:  ${totalLibros}`);
+
+    const librosPrestados = libros.filter(libro => !libro.disponible); //revisamos que libros se han prestado, usamos !para que busque los false en el dato de disponibilodad
+    console.log("Dato 3.- Los libros prestados a usuarios actualmente son: ", librosPrestados); //imprimimos
+
+    const librosGenero = libros.reduce((total, libro) => //revisamos cuantos libros existen por genero usando reduce. 
+    {total[libro.genero] = (total[libro.genero] // buscamos en cada linea del array libros original, se inicia de cero y si ya hay un valor previo se suma 1 (|| 0) + 1)
+    || 0) + 1; return total;}, {}); //notita: el dato "total" inicia como un objeto vacio para poder contener los diversos generos
+
+    //imprimimos
+    console.log("Dato 4.- Los generos son: " , librosGenero);
+
+    const { libroViejo, libroNuevo } = libros.reduce((total, libro) => { //vamos a comparar antiguedad de libros para conocer el que tiene mayor y menor, 
+    // usamos reduce. para que evalue todos los que contiene el array libros
+        if (libro.anio < total.libroViejo.anio) {  //usamos if para evaluar dos condiciones excluyentes, si libro analizado es más antiguo que libroViejo se cumple la condicion
+            total.libroViejo = libro; // y se actualiza automaticamente
+        } else if (libro.anio > total.libroNuevo.anio) { //como son condiciones excluyentes (no peude ser mayor y menor al mismo tiempo) usamos else if
+            total.libroNuevo = libro; // Misma logica anterior se revisa si el libro es más nuevo que el que reduce. reviso en linea del array libros y de ser así se actualiza
+        }
+        return total; // Regresemos el valor total de antiguedad actualizado con la info del array libros del inicio
+    }, {
+        libroViejo: libros[0], // notita: De inicio se asume que el primer libro es el más viejo y reduce. va modificando, lo mismo con libroNuevo
+        libroNuevo: libros[0]
+    }); // imprimimos
+    console.log("Dato 5.- El libro más viejo es: " , libroViejo);
+    console.log("Dato 6.- El libro más reciente es: " ,  libroNuevo);
+        
+}
+//generarReporteLibros(); //Ejecutamos el reporte (*notita para que no corra al final del codigo lo puse como texto)
+
 
 // 6. Identificación Avanzada de libros
 

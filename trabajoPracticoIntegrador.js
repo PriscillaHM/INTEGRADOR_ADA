@@ -12,16 +12,16 @@ const prompt = require("prompt-sync")({ sigint: true });
 //  disponible (booleano: true o false).)
 
 let libros = [ 
-    {id: 1, título: "Fahrenheit 451", autor: "Ray Bradbury", año: 1953, género: "Ciencia ficcion", disponible: true }, //colocamos [] para que los datos a consultar sean por libro
-    {id: 2, título: "Cumbres borrascosas", autor: "Emily Bronte", año: 1847, género: "Romance", disponible: true },
-    {id: 3, título: "Mujercitas", autor: "Louisa May Alcott", año: 1868, género: "Ficcion", disponible: false },
-    {id: 4, título: "Dracula", autor: "Bram Stoker", año: 1897, género: "Terror", disponible: false },
-    {id: 5, título: "La tregua", autor: "Mario Benedetti", año: 1960, género: "Romance", disponible: false },
-    {id: 6, título: "Dune", autor: "Frank Herbert", año: 1965, género: "Ciencia ficcion", disponible: true },
-    {id: 7, título: "Carrie", autor: "Stephen King", año: 1974, género: "Terror", disponible: false },
-    {id: 8, título: "El hombre en busca de sentido", autor: "Viktor Frankl", año: 1946, género: "Psicologia", disponible: true },
-    {id: 9, título: "Ensayo sobre la ceguera", autor: "Jose Saramago", año: 1995, género: "Distopia", disponible: true },
-    {id: 10, título: "Un mundo feliz", autor: "Aldous Huxley", año: 1932, género: "Distopia", disponible: false },
+    {id: 1, titulo: "Fahrenheit 451", autor: "Ray Bradbury", anio: 1953, genero: "Ciencia ficcion", disponible: true }, //colocamos [] para que los datos a consultar sean por libro
+    {id: 2, titulo: "Cumbres borrascosas", autor: "Emily Bronte", anio: 1847, genero: "Romance", disponible: false },
+    {id: 3, titulo: "Mujercitas", autor: "Louisa May Alcott", anio: 1868, genero: "Ficcion", disponible: false },
+    {id: 4, titulo: "Dracula", autor: "Bram Stoker", anio: 1897, genero: "Terror", disponible: false },
+    {id: 5, titulo: "La tregua", autor: "Mario Benedetti", anio: 1960, genero: "Romance", disponible: true },
+    {id: 6, titulo: "Dune", autor: "Frank Herbert", anio: 1965, genero: "Ciencia ficcion", disponible: false },
+    {id: 7, titulo: "Carrie", autor: "Stephen King", anio: 1974, genero: "Terror", disponible: true },
+    {id: 8, titulo: "El hombre en busca de sentido", autor: "Viktor Frankl", anio: 1946, genero: "Psicologia", disponible: true },
+    {id: 9, titulo: "Ensayo sobre la ceguera", autor: "Jose Saramago", anio: 1995, genero: "Distopia", disponible: false },
+    {id: 10, titulo: "Un mundo feliz", autor: "Aldous Huxley", anio: 1932, genero: "Distopia", disponible: true},
 ];
 
 // Paso 2.- Imprimimos para que se muestre nuestro array de libros
@@ -99,6 +99,7 @@ let mostrarTodosLosUsuarios = () => {
 let buscarUsuario = (emailBuscar) =>{
     //Buscamos en el array el email proporcionado
     let indice = usuarios.find(usuario => usuario.email == emailBuscar);
+
     //En caso de que no encuentre el usuario
     if(indice == undefined){
         console.log(`Usuario con email el ${emailBuscar} no ha sido encontrado`);
@@ -114,12 +115,13 @@ let borrarUsuario = (nombreBorrar, emailBorrar) =>{
     let indiceNombre = usuarios.find(usuario => usuario.nombre == nombreBorrar);
     let indiceEmail = usuarios.find(usuario => usuario.email == emailBorrar);
     let indice = usuarios.findIndex(usuario => usuario.email === emailBorrar);
+
     //En caso de que no encuentre el usuario
     if(indiceNombre.id != indiceEmail.id){
         console.log(`Usuario con el nombre ${nombreBorrar} y el email el ${emailBuscar} no ha sido encontrado`);
     } else{ //En caso de encontrar el usuario
         //Usuario que se borrara
-        const usuarioABorrar = usuarios.splice(indice,1);
+        usuarios.splice(indice,1);
         console.log(`Usuario eliminado: nombre ${nombreBorrar}, email ${emailBorrar}`);
     }
 }
@@ -129,10 +131,46 @@ let borrarUsuario = (nombreBorrar, emailBorrar) =>{
 // a) Desarrollar una función prestarLibro(idLibro, idUsuario) que marque 
 // un libro como no disponible y lo agregue a la lista de libros prestados 
 // del usuario.
+//Funcion que muestra los libros disponibles
+let mostrarLibrosDisponibles = () => {
+    const librosDisponibles = libros.filter(libro => libro.disponible);
+
+    console.log("Libros disponibles:");
+    librosDisponibles.forEach(libro => {
+        console.log(`ID: ${libro.id}, Nombre: ${libro.titulo}`);
+    });
+}
+
+let prestarLibro = (idLibro, idUsuario) => {
+    //Buscamos el libro para prestar
+    let libroPrestar = libros.find(libro => libro.id == idLibro);
+    //Buscamos el usuario que solicita el libro
+    let usuarioPrestamo = usuarios.find(usuario => usuario.id == idUsuario);
+    //Verificamos que el libro este disponible
+    if(libroPrestar.disponible == false){
+        console.log(`Lo sentimos, el libro ${libroPrestar.nombre} no se encuentra disponible`);
+    } else{
+        libroPrestar.disponible = false;
+        usuarioPrestamo.libros.push(parseFloat(idLibro));
+        console.log('Prestamo autorizado, aculmente cuenta con: ' + usuarioPrestamo.libros.length + ' libro(s) en prestamo.');
+    }
+}
 
 // b) Implementar una función devolverLibro(idLibro, idUsuario) que 
 // marque un libro como disponible y lo elimine de la lista de libros 
 // prestados del usuario.
+let devolverLibro = (idLibro, idUsuario) =>{
+    //Buscamos el libro para devolver
+    let libroPrestar = libros.find(libro => libro.id == idLibro);
+    //Buscamos el usuario que regresa el libro
+    let usuarioPrestamo = usuarios.find(usuario => usuario.id == idUsuario);
+
+    libroPrestar.disponible = true;
+
+    let indice = usuarioPrestamo.libros.findIndex(libro => libro === idLibro);
+    usuarioPrestamo.libros.splice(indice,1);
+    console.log(`Gracias por delvolver el libro ${libroPrestar.titulo}`);
+}
 
 // 5. Reportes
 // a) Crear una función generarReporteLibros() que utilice métodos 
@@ -168,6 +206,21 @@ let borrarUsuario = (nombreBorrar, emailBorrar) =>{
 // ✓ Eliminar espacios en blanco al inicio y final de los nombres de 
 // autores.
 // ✓ Formatear los emails de los usuarios a minúsculas.
+let normalizarDatos = () =>{
+    //Convertir todos los títulos a mayúsculas.
+    //Eliminar espacios en blanco al inicio y final de los nombres de autores.
+    libros.forEach(libro => {
+        libro.titulo = libro.titulo.trim().toUpperCase();
+        libro.autor = libro.autor.trim();
+    });
+
+    //Formatear los emails de los usuarios a minúsculas.
+    usuarios.forEach(usuario =>{
+        usuario.email = usuario.email.toLowerCase();
+    })
+    console.log(libros);
+    console.log(usuarios)
+}
 
 // 9. Interfaz de Usuario por Consola
 
@@ -187,7 +240,10 @@ let menuPrincipal = () =>{
         console.log("6. Mostrar usuarios");
         console.log("7. Buscar usuario");
         console.log("8. Borrar usuario");
-        console.log("3. Salir");
+        console.log("9. Prestamo de libro");
+        console.log("10. Devolucion de libro");
+        console.log("11. Normalizar datos");
+        console.log("12. Salir");
         opcion = prompt("Seleccione una opción: ");
 
         switch (opcion) {
@@ -208,6 +264,19 @@ let menuPrincipal = () =>{
                 const emailBorrar = prompt('Ingrese el email del usuario que desea borrar: ');
                 borrarUsuario(nombreBorrar,emailBorrar);
                 break;
+            case "9":
+                mostrarLibrosDisponibles();
+                const idLibro = prompt('Ingrese el id del libro que desea: ');
+                const idUsuario = prompt('Ingrese su id de usuario: ');
+                prestarLibro(idLibro, idUsuario);
+            case "10":
+                const idLibroDevolver = prompt('Ingrese el id del libro que desea devolver: ');
+                const idUsuarioDevolver = prompt('Ingrese su id de usuario: ');
+                devolverLibro(idLibroDevolver, idUsuarioDevolver);
+                break;
+            case "11":
+                normalizarDatos();
+                break;
             case "3":
                 console.log("Saliendo del programa...");
                 break;
@@ -218,11 +287,3 @@ let menuPrincipal = () =>{
 }
 
 menuPrincipal();
-
-// 10. Comentando mi código
-
-// a) Se tomará como último punto a evaluar la correcta utilización de 
-// comentarios explicando paso por paso su código. 
-
-// b) Deberán seccionar el código punto por punto y con una explicación 
-// corta y simple de que hicieron en cada punto.

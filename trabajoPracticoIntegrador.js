@@ -47,16 +47,50 @@ let usuarios = [
 
 // a) Funcion agregarLibro (id, titulo, autor, anio, genero) que agraga un nuevo libro al 
 // array de libros.
+function agregarLibro(id, titulo, autor, anio, genero) {
+    const nuevoLibro = { id, titulo, autor, anio, genero, disponible: true };
+    libros.push(nuevoLibro);
+    console.log("Libro agregado con éxito:", nuevoLibro);
+}
 
 // b) Función buscarLibro(criterio, valor) que permita buscar 
 // libros por título, autor o género utilizando el algoritmo de búsqueda 
 // lineal.
+function buscarLibro(criterio, valor) {
+    const resultado = libros.filter(libro => libro[criterio]?.toLowerCase() === valor.toLowerCase());
+    if (resultado.length > 0) {
+        console.log("Libros encontrados:", resultado);
+    } else {
+        console.log("No se encontraron libros con ese criterio.");
+    }
+}
 
 // c) Función ordenarLibros(criterio) que ordena los libros 
 // por título o año utilizando el algoritmo de ordenamiento burbuja
 // y luego muestre los libros ordenados en la consola.
+function ordenarLibros(criterio) {
+    for (let i = 0; i < libros.length - 1; i++) {
+        for (let j = 0; j < libros.length - i - 1; j++) {
+            if (libros[j][criterio] > libros[j + 1][criterio]) {
+                const temp = libros[j];
+                libros[j] = libros[j + 1];
+                libros[j + 1] = temp;
+            }
+        }
+    }
+    console.log("Libros ordenados por", criterio, ":", libros);
+}
 
 // d) función borrarLibro(id) que elimine el libro que se le pase por parámetro.
+function borrarLibro(id) {
+    const indice = libros.findIndex(libro => libro.id === id);
+    if (indice !== -1) {
+        const libroEliminado = libros.splice(indice, 1);
+        console.log("Libro eliminado:", libroEliminado[0]);
+    } else {
+        console.log("No se encontró un libro con ese ID.");
+    }
+}
 
 // 3. Gestion de Usuarios 
 
@@ -216,8 +250,26 @@ let generarReporteLibros = () => { //notita:usamos un arrow para simplificar
 // y muestre todos los libros cuyo título contiene más de una palabra
 // (no títulos que contengan números ni otros caracteres).
 
-// b) La función debe devolver un array con los títulos de esos libros y 
-// mostrarlo en la consola.
+function librosConPalabrasEnTitulo() {
+    // Filtramos libros que cumplan las dos condiciones:
+    const librosFiltrados = libros.filter(libro => {
+        const soloLetrasYEspacios = /^[a-zA-Z\s]+$/.test(libro.titulo); // Solo letras y espacios
+        const masDeUnaPalabra = libro.titulo.trim().split(" ").length > 1; // Más de una palabra
+        return soloLetrasYEspacios && masDeUnaPalabra;
+    });
+
+    // Obtenemos solo los títulos de los libros filtrados
+    const titulos = librosFiltrados.map(libro => libro.titulo);
+
+    // Mostramos en la consola los títulos encontrados
+    console.log("Libros con títulos que cumplen las condiciones:", titulos);
+
+    // Retornamos el array con los títulos para uso adicional
+    return titulos;
+}
+
+// b) La función debe devolver un array con los títulos y mostrarlos en consola.
+// Esto ya está cubierto en la implementación de la función anterior.
 
 // 7. Cálculos Estadísticos
 
@@ -226,6 +278,29 @@ let generarReporteLibros = () => { //notita:usamos un arrow para simplificar
 // ✓ Promedio de años de publicación de los libros.
 // ✓ Año de publicación más frecuente.
 // ✓ Diferencia en años entre el libro más antiguo y el más nuevo.
+
+function calcularEstadisticas() {
+    // Paso 1: Crear un array con los años de publicación de los libros
+    const anios = libros.map(libro => libro.anio);
+
+    // Paso 2: Calcular el promedio de años
+    const promedio = anios.reduce((sum, anio) => sum + anio, 0) / anios.length;
+
+    // Paso 3: Calcular el año más frecuente
+    const frecuencia = anios.reduce((contador, anio) => {
+        contador[anio] = (contador[anio] || 0) + 1; // Contamos cuántas veces aparece cada año
+        return contador;
+    }, {});
+    const anioFrecuente = Object.keys(frecuencia).reduce((a, b) => frecuencia[a] > frecuencia[b] ? a : b);
+
+    // Paso 4: Calcular la diferencia entre el libro más antiguo y el más nuevo
+    const diferencia = Math.max(...anios) - Math.min(...anios);
+
+    // Paso 5: Mostrar los resultados en consola
+    console.log("Promedio de años de publicación:", promedio.toFixed(2)); // Limitamos a 2 decimales
+    console.log("Año más frecuente de publicación:", anioFrecuente);
+    console.log("Diferencia entre el libro más antiguo y el más nuevo:", diferencia);
+}
 
 // 8. Manejo de Cadenas
 
@@ -262,58 +337,80 @@ let normalizarDatos = () =>{
 // manejar la lógica.
 
 
-let menuPrincipal = () =>{
+function menuPrincipal() {
     let opcion;
     do {
-        console.log("\n=== Menú ===");
-        console.log("5. Registrar usuario");
-        console.log("6. Mostrar usuarios");
-        console.log("7. Buscar usuario");
-        console.log("8. Borrar usuario");
-        console.log("9. Prestamo de libro");
-        console.log("10. Devolucion de libro");
-        console.log("11. Normalizar datos");
+        console.log("\n=== Menú Principal ===");
+        console.log("1. Agregar Libro");
+        console.log("2. Buscar Libro");
+        console.log("3. Ordenar Libros");
+        console.log("4. Borrar Libro");
+        console.log("5. Registrar Usuario");
+        console.log("6. Mostrar Usuarios");
+        console.log("7. Prestar Libro");
+        console.log("8. Devolver Libro");
+        console.log("9. Generar Reporte de Libros");
+        console.log("10. Libros con Palabras en Títulos");
+        console.log("11. Calcular Estadísticas");
         console.log("12. Salir");
-        opcion = prompt("Seleccione una opción: ");
 
+        opcion = prompt("Seleccione una opción: ");
         switch (opcion) {
+            case "1":
+                const id = parseInt(prompt("ID: "));
+                const titulo = prompt("Título: ");
+                const autor = prompt("Autor: ");
+                const anio = parseInt(prompt("Año: "));
+                const genero = prompt("Género: ");
+                agregarLibro(id, titulo, autor, anio, genero);
+                break;
+            case "2":
+                const criterio = prompt("Buscar por (titulo, autor, genero): ");
+                const valor = prompt("Valor de búsqueda: ");
+                buscarLibro(criterio, valor);
+                break;
+            case "3":
+                const criterioOrden = prompt("Ordenar por (titulo, anio): ");
+                ordenarLibros(criterioOrden);
+                break;
+            case "4":
+                const idBorrar = parseInt(prompt("ID del libro a borrar: "));
+                borrarLibro(idBorrar);
+                break;
             case "5":
-                const nombre = prompt("Ingrese el nombre del usuario: ");
-                const email = prompt("Ingrese el email del usuario: ");
-                registrarUsuario(nombre, email);
+                const nombreUsuario = prompt("Nombre: ");
+                const emailUsuario = prompt("Email: ");
+                registrarUsuario(nombreUsuario, emailUsuario);
                 break;
             case "6":
                 mostrarTodosLosUsuarios();
                 break;
             case "7":
-                const emailBuscar = prompt('Ingrese el email del usuario que desea buscar: ');
-                buscarUsuario(emailBuscar);
+                const idLibroPrestar = parseInt(prompt("ID del libro: "));
+                const idUsuarioPrestar = parseInt(prompt("ID del usuario: "));
+                prestarLibro(idLibroPrestar, idUsuarioPrestar);
                 break;
             case "8":
-                const nombreBorrar = prompt('Ingrese el nombre del usuario que desea borrar: ');
-                const emailBorrar = prompt('Ingrese el email del usuario que desea borrar: ');
-                borrarUsuario(nombreBorrar,emailBorrar);
-                break;
-            case "9":
-                mostrarLibrosDisponibles();
-                const idLibro = prompt('Ingrese el id del libro que desea: ');
-                const idUsuario = prompt('Ingrese su id de usuario: ');
-                prestarLibro(idLibro, idUsuario);
-            case "10":
-                const idLibroDevolver = prompt('Ingrese el id del libro que desea devolver: ');
-                const idUsuarioDevolver = prompt('Ingrese su id de usuario: ');
+                const idLibroDevolver = parseInt(prompt("ID del libro: "));
+                const idUsuarioDevolver = parseInt(prompt("ID del usuario: "));
                 devolverLibro(idLibroDevolver, idUsuarioDevolver);
                 break;
-            case "11":
-                normalizarDatos();
+            case "9":
+                generarReporteLibros();
                 break;
-            case "3":
+            case "10":
+                librosConPalabrasEnTitulo();
+                break;
+            case "11":
+                calcularEstadisticas();
+                break;
+            case "12":
                 console.log("Saliendo del programa...");
                 break;
             default:
-                console.log("Opción no válida. Intente de nuevo.");
+                console.log("Opción no válida.");
         }
-    } while (opcion !== "3");
+    } while (opcion !== "12");
 }
 
 menuPrincipal();

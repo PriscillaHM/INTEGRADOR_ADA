@@ -50,7 +50,7 @@ let usuarios = [
 
 // a) Funcion agregarLibro (id, titulo, autor, anio, genero) que agraga un nuevo libro al 
 // array de libros.
-function agregarLibro(id, titulo, autor, anio, genero) {
+let agregarLibro = (id, titulo, autor, anio, genero) =>{
     const nuevoLibro = { id, titulo, autor, anio, genero, disponible: true };
     libros.push(nuevoLibro);
     console.log("Libro agregado con éxito:", nuevoLibro);
@@ -59,7 +59,7 @@ function agregarLibro(id, titulo, autor, anio, genero) {
 // b) Función buscarLibro(criterio, valor) que permita buscar 
 // libros por título, autor o género utilizando el algoritmo de búsqueda 
 // lineal.
-function buscarLibro(criterio, valor) {
+let buscarLibro = (criterio, valor) =>{
     const resultado = libros.filter(libro => libro[criterio]?.toLowerCase() === valor.toLowerCase());
     if (resultado.length > 0) {
         console.log("Libros encontrados:", resultado);
@@ -71,7 +71,7 @@ function buscarLibro(criterio, valor) {
 // c) Función ordenarLibros(criterio) que ordena los libros 
 // por título o año utilizando el algoritmo de ordenamiento burbuja
 // y luego muestre los libros ordenados en la consola.
-function ordenarLibros(criterio) {
+let ordenarLibros = (criterio) => {
     for (let i = 0; i < libros.length - 1; i++) {
         for (let j = 0; j < libros.length - i - 1; j++) {
             if (libros[j][criterio] > libros[j + 1][criterio]) {
@@ -85,7 +85,7 @@ function ordenarLibros(criterio) {
 }
 
 // d) función borrarLibro(id) que elimine el libro que se le pase por parámetro.
-function borrarLibro(id) {
+let borrarLibro = (id) =>{
     const indice = libros.findIndex(libro => libro.id === id);
     if (indice !== -1) {
         const libroEliminado = libros.splice(indice, 1);
@@ -252,8 +252,10 @@ let generarReporteLibros = () => { //notita:usamos un arrow para simplificar
 // a) Implementar una función librosConPalabrasEnTitulo() que identifique 
 // y muestre todos los libros cuyo título contiene más de una palabra
 // (no títulos que contengan números ni otros caracteres).
+// b) La función debe devolver un array con los títulos y mostrarlos en consola.
+// Esto ya está cubierto en la implementación de la función anterior.
 
-function librosConPalabrasEnTitulo() {
+let librosConPalabrasEnTitulo = () =>{
     // Filtramos libros que cumplan las dos condiciones:
     const librosFiltrados = libros.filter(libro => {
         const soloLetrasYEspacios = /^[a-zA-Z\s]+$/.test(libro.titulo); // Solo letras y espacios
@@ -271,8 +273,6 @@ function librosConPalabrasEnTitulo() {
     return titulos;
 }
 
-// b) La función debe devolver un array con los títulos y mostrarlos en consola.
-// Esto ya está cubierto en la implementación de la función anterior.
 
 // 7. Cálculos Estadísticos
 
@@ -282,7 +282,7 @@ function librosConPalabrasEnTitulo() {
 // ✓ Año de publicación más frecuente.
 // ✓ Diferencia en años entre el libro más antiguo y el más nuevo.
 
-function calcularEstadisticas() {
+let calcularEstadisticas = () =>{
     // Paso 1: Crear un array con los años de publicación de los libros
     const anios = libros.map(libro => libro.anio);
 
@@ -336,7 +336,7 @@ let normalizarDatos = () =>{
 // opciones al usuario y permita interactuar con el sistema utilizando 
 // prompt(), imprimimos para que el usuario pueda seleccionar una opción de accióna realizar (las acciones corresponden a las secciones del codigo)
 
-function menuPrincipal() {
+let menuPrincipal = () =>{
     let opcion;
     do {
         console.log("\n=== Menú Principal ===");
@@ -346,12 +346,15 @@ function menuPrincipal() {
         console.log("4. Borrar Libro");
         console.log("5. Registrar Usuario");
         console.log("6. Mostrar Usuarios");
-        console.log("7. Prestar Libro");
-        console.log("8. Devolver Libro");
-        console.log("9. Generar Reporte de Libros");
-        console.log("10. Libros con Palabras en Títulos");
-        console.log("11. Calcular Estadísticas");
-        console.log("12. Salir");
+        console.log("7. Buscar usuario");
+        console.log("8. Borrar usuario");
+        console.log("9. Prestar Libro");
+        console.log("10. Devolver Libro");
+        console.log("11. Generar Reporte de Libros");
+        console.log("12. Libros con Palabras en Títulos");
+        console.log("13. Calcular Estadísticas");
+        console.log("14. Normalizar datos");
+        console.log("15. Salir");
 // Para construir el usamos las estructuras de control if, switch y ciclos, 
 // se enlazan con todos los apartados que construimos en el codigo
 
@@ -388,31 +391,43 @@ function menuPrincipal() {
                 mostrarTodosLosUsuarios();
                 break;
             case "7":
+                const emailBuscar = prompt('Ingrese el email del usuario que desea buscar: ');
+                buscarUsuario(emailBuscar);
+                break;
+            case "8":
+                const nombreBorrar = prompt('Ingrese el nombre del usuario a borrar: ');
+                const emailBorrar = prompt('Ingrese el email del usuario a borrar: ');
+                borrarUsuario(nombreBorrar, emailBorrar);
+                break;
+            case "9":
                 const idLibroPrestar = parseInt(prompt("ID del libro: "));
                 const idUsuarioPrestar = parseInt(prompt("ID del usuario: "));
                 prestarLibro(idLibroPrestar, idUsuarioPrestar);
                 break;
-            case "8":
+            case "10":
                 const idLibroDevolver = parseInt(prompt("ID del libro: "));
                 const idUsuarioDevolver = parseInt(prompt("ID del usuario: "));
                 devolverLibro(idLibroDevolver, idUsuarioDevolver);
                 break;
-            case "9":
+            case "11":
                 generarReporteLibros();
                 break;
-            case "10":
+            case "12":
                 librosConPalabrasEnTitulo();
                 break;
-            case "11":
+            case "13":
                 calcularEstadisticas();
                 break;
-            case "12":
+            case "14":
+                normalizarDatos();
+                break;
+            case "15":
                 console.log("Saliendo del programa...");
                 break;
             default:
                 console.log("Opción no válida.");
         }
-    } while (opcion !== "12");
+    } while (opcion !== "15");
 }
 
 menuPrincipal(); //ejecutamos menu principal.

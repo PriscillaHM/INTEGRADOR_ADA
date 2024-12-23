@@ -1,5 +1,8 @@
 //SISTEMA DE GESTION DE BIBLIOTECA
-//GRUPO 7 
+//GRUPO 7: 
+//Priscilla Hurtado
+//Liz Quero Batista
+//Aura Morales García
 //Paso 0.- Colocamos la constante prompt para que los usuarios puedan ingresar datos
 //en nuestro programa ya sea en letras o numeros.
 const prompt = require("prompt-sync")({ sigint: true });
@@ -12,7 +15,7 @@ const prompt = require("prompt-sync")({ sigint: true });
 //  disponible (booleano: true o false).)
 
 let libros = [ 
-    {id: 1, titulo: "Fahrenheit 451", autor: "Ray Bradbury", anio: 1953, genero: "Ciencia ficcion", disponible: true }, //colocamos [] para que los datos a consultar sean por libro
+    {id: 1, titulo: "Fahrenheit 451", autor: "Ray Bradbury", anio: 1953, genero: "Ciencia ficcion", disponible: true }, //colocamos {} para que los datos a consultar sean por libro
     {id: 2, titulo: "Cumbres borrascosas", autor: "Emily Bronte", anio: 1847, genero: "Romance", disponible: false },
     {id: 3, titulo: "Mujercitas", autor: "Louisa May Alcott", anio: 1868, genero: "Ficcion", disponible: false },
     {id: 4, titulo: "Dracula", autor: "Bram Stoker", anio: 1897, genero: "Terror", disponible: false },
@@ -329,19 +332,15 @@ let normalizarDatos = () =>{
 
 // 9. Interfaz de Usuario por Consola
 
-// a) Implementar una función menuPrincipal() que muestre un menú de 
+// Implementamos una función menuPrincipal() que muestre un menú de 
 // opciones al usuario y permita interactuar con el sistema utilizando 
-// prompt().
-// b) El menú debe incluir opciones para todas las funcionalidades 
-// anteriores y utilizar estructuras de control (if, switch, ciclos) para 
-// manejar la lógica.
-
+// prompt(), imprimimos para que el usuario pueda seleccionar una opción de accióna realizar (las acciones corresponden a las secciones del codigo)
 
 function menuPrincipal() {
     let opcion;
     do {
         console.log("\n=== Menú Principal ===");
-        console.log("1. Agregar Libro");
+        console.log("1. Agregar Libro"); 
         console.log("2. Buscar Libro");
         console.log("3. Ordenar Libros");
         console.log("4. Borrar Libro");
@@ -353,8 +352,11 @@ function menuPrincipal() {
         console.log("10. Libros con Palabras en Títulos");
         console.log("11. Calcular Estadísticas");
         console.log("12. Salir");
+// Para construir el usamos las estructuras de control if, switch y ciclos, 
+// se enlazan con todos los apartados que construimos en el codigo
 
-        opcion = prompt("Seleccione una opción: ");
+        opcion = prompt("Seleccione una opción: ");//si el usuario selecciona el numero 1 se le 
+        // desplegara el punto 1 que imprimimos en el bloque anterior "agregar libros", y subsecuentemente hasta la opción 12.
         switch (opcion) {
             case "1":
                 const id = parseInt(prompt("ID: "));
@@ -413,4 +415,4 @@ function menuPrincipal() {
     } while (opcion !== "12");
 }
 
-menuPrincipal();
+menuPrincipal(); //ejecutamos menu principal.
